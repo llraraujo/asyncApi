@@ -1,5 +1,6 @@
 ﻿using BooksAPI.DbContexts;
 using BooksAPI.Entities;
+using BooksAPI.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace BooksAPI.Services
 
 
         [HttpGet("Books")]
+        [TypeFilter(typeof(BooksResultFilter))]
         public async Task<IActionResult> GetBooks()
         {
             IEnumerable<Book> books = await _bookRepository.GetAllBooksAsync();
@@ -27,6 +29,7 @@ namespace BooksAPI.Services
         }
 
         [HttpGet("Books/{id}")]
+        [TypeFilter(typeof(BookResultFilter))]
         public async Task<IActionResult> GetBook(Guid id)
         {
             Book? book = await _bookRepository.GetBookAsync(id);

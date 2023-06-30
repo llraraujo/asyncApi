@@ -1,6 +1,7 @@
 using BooksAPI.DbContexts;
 using BooksAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<BooksContext>(options =>
     );
 
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
