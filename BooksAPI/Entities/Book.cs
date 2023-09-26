@@ -26,5 +26,13 @@ namespace BooksAPI.Entities
             Title = title;
             Description = description;
         }
+
+        // Esse construtor é necessário para o autoMapper funcionar corretamente (caso não seja configurando ao mapear o DTO no profile)
+        //public Book(Guid authorId, string title, string? description)
+        //{
+        //    AuthorId = authorId;
+        //    Title = title;
+        //    Description = description;
+        //}
     }
 }

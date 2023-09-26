@@ -6,5 +6,7 @@ namespace BooksAPI.Services
     {
         Task<IEnumerable<Book>> GetAllBooksAsync();
         Task<Book?> GetBookAsync(Guid id);
+        void AddBook(Book bookToAdd);
+        Task<bool> SaveChangesAsync();
     }
 }
