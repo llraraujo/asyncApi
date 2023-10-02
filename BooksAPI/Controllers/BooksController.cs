@@ -30,6 +30,17 @@ namespace BooksAPI.Services
             return Ok(books);
         }
 
+        [HttpGet("booksstream")]
+        public async IAsyncEnumerable<BookDto> StreamBooks()
+        {
+            await foreach(var book in _bookRepository.GetBookAsAsyncEnumerable())
+            {
+                // adicionando delay para visualizar o efeito
+                await Task.Delay(500);
+                yield return _mapper.Map<BookDto>(book);
+            }
+        }
+
         [HttpGet("books/{id}", Name ="GetBook")]
         [TypeFilter(typeof(BookResultFilter))]
         public async Task<IActionResult> GetBook(Guid id)

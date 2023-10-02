@@ -32,6 +32,11 @@ namespace BooksAPI.Services
                 .ToListAsync();
         }
 
+        public IAsyncEnumerable<Book> GetBookAsAsyncEnumerable()
+        {
+            return _context.Books.AsAsyncEnumerable<Book>();
+        }
+
         public async Task<IEnumerable<Book>> GetAllBooksAsync(IEnumerable<Guid> bookIds)
         {
             return await _context.Books
