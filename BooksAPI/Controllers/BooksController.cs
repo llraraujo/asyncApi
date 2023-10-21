@@ -3,8 +3,10 @@ using BooksAPI.DbContexts;
 using BooksAPI.Entities;
 using BooksAPI.Filters;
 using BooksAPI.Models;
+using BooksAPI.Models.External;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace BooksAPI.Services
 {
@@ -42,15 +44,31 @@ namespace BooksAPI.Services
         }
 
         [HttpGet("books/{id}", Name ="GetBook")]
-        [TypeFilter(typeof(BookResultFilter))]
-        public async Task<IActionResult> GetBook(Guid id)
+        [TypeFilter(typeof(BookWithCoversResultFilter))]
+        public async Task<IActionResult> GetBook(Guid id, CancellationToken cancellationToken)
         {
-            Book? book = await _bookRepository.GetBookAsync(id);
-            if(book == null)
+            Book? bookEntity = await _bookRepository.GetBookAsync(id);
+            if(bookEntity == null)
             {
                 return NotFound();
             }
-            return Ok(book);
+            //var bookCover = await _bookRepository.GetBookCoverAsync("dummycover");
+
+            var bookCovers = await _bookRepository.GetBookCoversProcessOneByOneAsync(id, cancellationToken);
+
+            //var bookCovers = await _bookRepository.GetBookCoversProcessAfterWaitForAllAsync(id);                                 
+
+            /*
+                for(int i = 0; i < 100; i++)
+                {
+                    // cálculos pesados (não suportam cancelamento por eles mesmos...)
+                    // Usar  cancellationToken.IsCancellationRequested ou
+                    // cancellationToken.ThrowIfCancellationRequested();
+                }
+            */
+
+
+            return Ok((bookEntity, bookCovers));
         }
 
         [HttpPost("books")]
